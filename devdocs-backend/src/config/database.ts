@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
 
 export const connectDB = async (): Promise<void> => {
-  const mongoUri = process.env.MONGODB_URI || "mongodb://localhost:27017/devdocs";
+  const mongoUri = process.env.MONGODB_URI;
+  if (!mongoUri) {
+    console.error("❌ MONGODB_URI is not set. Add your MongoDB Atlas connection string to .env");
+    process.exit(1);
+  }
 
   try {
     const conn = await mongoose.connect(mongoUri, {
