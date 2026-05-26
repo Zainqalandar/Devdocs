@@ -112,7 +112,7 @@ function embedSource(code: string): string {
   return escapeScriptClose(code);
 }
 
-function buildJavaScriptRunnerDocument(code: string): string {
+export function buildJavaScriptRunnerDocument(code: string): string {
   const safeCode = escapeScriptClose(code);
   return `<!DOCTYPE html>
 <html>
@@ -161,87 +161,30 @@ function buildJavaScriptRunnerDocument(code: string): string {
 </html>`;
 }
 
-function buildTypeScriptRunnerDocument(code: string): string {
-  const safeSource = embedSource(code);
+/** Static HTML for TypeScript compile errors (shown in the sandboxed output iframe). */
+export function buildTypeScriptErrorDocument(errors: string[]): string {
+  const lines = errors.map((e) => escapeHtml(e)).join("<br>");
   return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://unpkg.com/typescript@5.7.2/lib/typescript.js"><\/script>
 <style>
-  * { box-sizing: border-box; }
-  body { margin: 0; padding: 12px; font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: 13px; line-height: 1.5; background: #1e1e1e; color: #d4d4d4; }
-  #out { white-space: pre-wrap; word-break: break-word; }
-  .err { color: #f48771; }
-  .warn { color: #dcdcaa; }
+  body { margin: 0; padding: 12px; font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: 13px; line-height: 1.5; background: #1e1e1e; color: #f48771; }
 </style>
 </head>
 <body>
-<div id="out"></div>
-<script type="text/plain" id="source">${safeSource}</script>
-<script>
-(function () {
-  var out = document.getElementById("out");
-  var lines = [];
-  function append(text, cls) {
-    var span = cls ? '<span class="' + cls + '">' + text + '</span>' : text;
-    lines.push(span);
-    out.innerHTML = lines.join("\\n");
-  }
-  var _log = console.log;
-  var _err = console.error;
-  console.log = function () {
-    var msg = Array.prototype.slice.call(arguments).map(function (a) {
-      try { return typeof a === "object" ? JSON.stringify(a) : String(a); } catch (e) { return String(a); }
-    }).join(" ");
-    append(msg, "");
-    _log.apply(console, arguments);
-  };
-  console.error = function () {
-    append(Array.prototype.slice.call(arguments).join(" "), "err");
-    _err.apply(console, arguments);
-  };
-  function preprocessTs(src) {
-    src = src.replace(/^import\\s+type\\s+.+$/gm, "");
-    src = src.replace(/^export\\s+(default\\s+)?/gm, "");
-    return src;
-  }
-  try {
-    var source = preprocessTs(document.getElementById("source").textContent);
-    var result = ts.transpileModule(source, {
-      compilerOptions: {
-        target: ts.ScriptTarget.ES2020,
-        module: ts.ModuleKind.None,
-        strict: false,
-        removeComments: false,
-      },
-      reportDiagnostics: true,
-    });
-    if (result.diagnostics && result.diagnostics.length) {
-      result.diagnostics.forEach(function (d) {
-        if (d.category === ts.DiagnosticCategory.Error) {
-          var msg = ts.flattenDiagnosticMessageText(d.messageText, "\\n");
-          append("TS Error: " + msg, "err");
-        }
-      });
-    }
-    var js = result.outputText;
-    if (!js || !js.trim()) {
-      append("TypeScript produced no output.", "err");
-      return;
-    }
-    append("// Compiled JavaScript:", "warn");
-    append(js, "warn");
-    append("---", "");
-    (0, eval)(js);
-  } catch (e) {
-    append("Error: " + (e && e.message ? e.message : String(e)), "err");
-  }
-})();
-<\/script>
+<p><strong>TypeScript compile error</strong></p>
+<p>${lines}</p>
 </body>
 </html>`;
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 function buildReactRunnerDocument(code: string, useTypeScript: boolean): string {
@@ -367,7 +310,9 @@ ${code}
   }
 
   if (kind === "typescript") {
-    return buildTypeScriptRunnerDocument(code);
+    // TypeScript is transpiled in the parent page (RunPageClient) — sandboxed iframes
+    // cannot load external compiler scripts from a CDN.
+    return buildJavaScriptRunnerDocument(code);
   }
 
   if (kind === "react") {

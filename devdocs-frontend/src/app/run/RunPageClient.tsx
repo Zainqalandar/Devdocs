@@ -1,11 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Play, Terminal, ArrowLeft } from "lucide-react";
 import {
+  buildJavaScriptRunnerDocument,
   buildRunnerDocument,
+  buildTypeScriptErrorDocument,
   getRunnerKind,
   getRunnerOutputLabel,
   getRunnerSubtitle,
@@ -25,6 +27,7 @@ export function RunPageClient() {
   const [editorCode, setEditorCode] = useState("");
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [runKey, setRunKey] = useState(0);
+  const [runnerHtml, setRunnerHtml] = useState("");
 
   useEffect(() => {
     if (!key) {
@@ -82,9 +85,38 @@ export function RunPageClient() {
 
   const language = payload?.language ?? langParam;
 
-  const runnerHtml = useMemo(() => {
-    if (!editorCode) return "";
-    return buildRunnerDocument(editorCode, language);
+  useEffect(() => {
+    if (!editorCode) {
+      setRunnerHtml("");
+      return;
+    }
+
+    const kind = getRunnerKind(language);
+    let cancelled = false;
+
+    if (kind === "typescript") {
+      void import("@/lib/transpile-typescript").then(({ transpileTypeScript }) => {
+        if (cancelled) return;
+        const { js, errors } = transpileTypeScript(editorCode);
+        if (errors.length > 0) {
+          setRunnerHtml(buildTypeScriptErrorDocument(errors));
+          return;
+        }
+        if (!js.trim()) {
+          setRunnerHtml(buildTypeScriptErrorDocument(["TypeScript produced no output."]));
+          return;
+        }
+        setRunnerHtml(buildJavaScriptRunnerDocument(js));
+      });
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    setRunnerHtml(buildRunnerDocument(editorCode, language));
+    return () => {
+      cancelled = true;
+    };
   }, [editorCode, language, runKey]);
 
   const handleRun = useCallback(() => {
