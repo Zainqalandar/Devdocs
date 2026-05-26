@@ -117,7 +117,9 @@ export async function seedLanguage(config: LanguageSeedConfig) {
         await Example.create({
           ...exRest,
           codeLanguage,
-          isRunnable: isRunnable ?? codeLanguage === "javascript",
+          isRunnable:
+            isRunnable ??
+            ["javascript", "typescript", "jsx", "tsx"].includes(codeLanguage),
           isPublished: true,
           section: section._id,
           topic: topic._id,

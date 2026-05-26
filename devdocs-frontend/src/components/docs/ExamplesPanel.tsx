@@ -58,7 +58,7 @@ function ExampleCard({ example }: { example: Example }) {
               <CodeBlockActions
                 code={example.code}
                 language={example.codeLanguage}
-                runnable={example.isRunnable}
+                runnable={example.isRunnable === false ? false : undefined}
               />
             </div>
             <HighlightedCode code={example.code} language={example.codeLanguage} />

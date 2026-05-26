@@ -1169,7 +1169,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["introduction", "mount", "jsx"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "jsx-syntax": [
@@ -1181,7 +1180,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["jsx", "syntax"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "jsx-expressions": [
@@ -1193,7 +1191,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["jsx", "expressions"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "function-components": [
@@ -1205,7 +1202,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["components", "props"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "react-props": [
@@ -1217,7 +1213,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["props", "components"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "useState-hook": [
@@ -1229,7 +1224,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["useState", "events"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "updating-state": [
@@ -1241,7 +1235,6 @@ export const reactExamples: Record<
       difficulty: "intermediate",
       tags: ["useState", "updater"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "rendering-lists-keys": [
@@ -1253,7 +1246,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["lists", "keys", "map"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "conditional-rendering": [
@@ -1265,7 +1257,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["conditional", "rendering"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "useEffect-introduction": [
@@ -1277,7 +1268,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["useEffect", "side-effects"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "react-context-api": [
@@ -1289,7 +1279,6 @@ export const reactExamples: Record<
       difficulty: "intermediate",
       tags: ["context", "useContext"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "react-router-setup": [
@@ -1301,7 +1290,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["router", "routes"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "custom-hooks": [
@@ -1313,7 +1301,6 @@ export const reactExamples: Record<
       difficulty: "intermediate",
       tags: ["custom-hooks", "useState"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "useReducer-basics": [
@@ -1325,7 +1312,6 @@ export const reactExamples: Record<
       difficulty: "intermediate",
       tags: ["useReducer", "state"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "lifting-state-up": [
@@ -1337,7 +1323,6 @@ export const reactExamples: Record<
       difficulty: "beginner",
       tags: ["state", "lifting"],
       order: 1,
-      isRunnable: false,
     },
   ],
 };

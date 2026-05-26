@@ -1349,7 +1349,6 @@ export const typescriptExamples: Record<
       difficulty: "beginner",
       tags: ["basics", "output", "introduction"],
       order: 1,
-      isRunnable: true,
     },
   ],
   "first-typescript-program": [
@@ -1361,7 +1360,6 @@ export const typescriptExamples: Record<
       difficulty: "beginner",
       tags: ["functions", "types", "basics"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "typescript-variables": [
@@ -1373,7 +1371,6 @@ export const typescriptExamples: Record<
       difficulty: "beginner",
       tags: ["variables", "types"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "type-annotations": [
@@ -1385,7 +1382,6 @@ export const typescriptExamples: Record<
       difficulty: "beginner",
       tags: ["annotations", "functions"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "primitive-types": [
@@ -1397,7 +1393,6 @@ export const typescriptExamples: Record<
       difficulty: "beginner",
       tags: ["primitives", "literals", "union"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "typed-functions": [
@@ -1409,7 +1404,6 @@ export const typescriptExamples: Record<
       difficulty: "beginner",
       tags: ["functions", "strings"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "optional-default-params": [
@@ -1421,7 +1415,6 @@ export const typescriptExamples: Record<
       difficulty: "beginner",
       tags: ["functions", "defaults", "parameters"],
       order: 1,
-      isRunnable: true,
     },
   ],
   "typescript-classes": [
@@ -1433,7 +1426,6 @@ export const typescriptExamples: Record<
       difficulty: "beginner",
       tags: ["classes", "oop"],
       order: 1,
-      isRunnable: true,
     },
   ],
   "generics-introduction": [
@@ -1445,7 +1437,6 @@ export const typescriptExamples: Record<
       difficulty: "intermediate",
       tags: ["generics", "arrays"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "partial-pick-omit": [
@@ -1457,7 +1448,6 @@ export const typescriptExamples: Record<
       difficulty: "intermediate",
       tags: ["utility-types", "partial"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "type-narrowing-basics": [
@@ -1469,7 +1459,6 @@ export const typescriptExamples: Record<
       difficulty: "intermediate",
       tags: ["narrowing", "typeof", "union"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "es-modules-typescript": [
@@ -1481,7 +1470,6 @@ export const typescriptExamples: Record<
       difficulty: "beginner",
       tags: ["modules", "functions"],
       order: 1,
-      isRunnable: false,
     },
   ],
   "type-guards": [
@@ -1493,7 +1481,6 @@ export const typescriptExamples: Record<
       difficulty: "intermediate",
       tags: ["type-guards", "narrowing"],
       order: 1,
-      isRunnable: false,
     },
   ],
 };

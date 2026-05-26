@@ -43,7 +43,7 @@ const languageConfigs = [
     sections: reactSections,
     examples: reactExamples,
     quizzes: reactQuizzes,
-    codeLanguage: "javascript",
+    codeLanguage: "jsx",
   },
 ];
 

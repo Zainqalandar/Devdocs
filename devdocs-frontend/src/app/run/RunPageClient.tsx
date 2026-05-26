@@ -4,7 +4,14 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Play, Terminal, ArrowLeft } from "lucide-react";
-import { buildRunnerDocument, isRunMessage, loadRunnerPayload } from "@/lib/run-code";
+import {
+  buildRunnerDocument,
+  getRunnerKind,
+  getRunnerOutputLabel,
+  getRunnerSubtitle,
+  isRunMessage,
+  loadRunnerPayload,
+} from "@/lib/run-code";
 import { CodeEditor } from "@/components/docs/CodeEditor";
 
 type LoadState = "loading" | "ready" | "missing";
@@ -124,7 +131,8 @@ export function RunPageClient() {
     );
   }
 
-  const isHtml = ["html", "markup", "htm"].includes(language.toLowerCase());
+  const runnerKind = getRunnerKind(language);
+  const isHtml = runnerKind === "html";
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -134,7 +142,7 @@ export function RunPageClient() {
           <div className="min-w-0">
             <h1 className="font-mono font-bold text-sm truncate">DevDocs Runner</h1>
             <p className="text-xs text-muted-foreground truncate">
-              Edit code, then run — {isHtml ? "HTML preview" : "JavaScript output"}
+              Edit code, then run — {getRunnerSubtitle(language)}
             </p>
           </div>
           <span className="text-[10px] font-mono uppercase tracking-wide text-muted-foreground border border-border px-2 py-0.5 rounded shrink-0">
@@ -175,7 +183,7 @@ export function RunPageClient() {
         <section className="lg:w-1/2 flex flex-col min-h-[320px] lg:min-h-0 flex-1">
           <div className="px-4 py-2 border-b border-border bg-muted/30">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-              {isHtml ? "Preview" : "Output"}
+              {getRunnerOutputLabel(language)}
             </p>
           </div>
           <div className="flex-1 bg-[#1e1e1e] p-0 min-h-0">
