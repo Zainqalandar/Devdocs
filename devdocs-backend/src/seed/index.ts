@@ -8,13 +8,12 @@ import { Topic } from "../models/Topic";
 import { Section } from "../models/Section";
 import { Example } from "../models/Example";
 import { Quiz } from "../models/Quiz";
+import { javascriptLanguage, javascriptTopics } from "./javascriptData";
 import {
-  javascriptLanguage,
-  javascriptTopics,
   javascriptSections,
   javascriptExamples,
   javascriptQuizzes,
-} from "./javascriptData";
+} from "./javascriptContent";
 import { seedAdminUser } from "./adminUser";
 
 const seed = async () => {
