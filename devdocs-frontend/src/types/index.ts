@@ -106,8 +106,31 @@ export interface Example {
   difficulty: "beginner" | "intermediate" | "advanced";
   tags: string[];
   isRunnable: boolean;
+  isPublished?: boolean;
   likeCount: number;
   order: number;
+}
+
+export type ContentBlockInput = Omit<ContentBlock, "_id"> & { _id?: string };
+
+export interface AdminQuizQuestion {
+  _id?: string;
+  question: string;
+  options: string[];
+  correctOptionIndex: number;
+  explanation: string;
+  order: number;
+}
+
+export interface AdminQuiz {
+  _id: string;
+  title: string;
+  description: string;
+  questions: AdminQuizQuestion[];
+  passingScore: number;
+  timeLimit: number;
+  isPublished: boolean;
+  totalAttempts: number;
 }
 
 export interface QuizQuestion {

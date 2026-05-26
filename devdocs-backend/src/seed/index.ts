@@ -15,6 +15,7 @@ import {
   javascriptExamples,
   javascriptQuizzes,
 } from "./javascriptData";
+import { seedAdminUser } from "./adminUser";
 
 const seed = async () => {
   try {
@@ -117,6 +118,8 @@ const seed = async () => {
       totalTopics: javascriptTopics.length,
       totalExamples,
     });
+
+    await seedAdminUser();
 
     // ── Summary ──────────────────────────────────────────────────────────────
     console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");

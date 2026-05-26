@@ -29,6 +29,27 @@ export const getQuizBySection = async (req: Request, res: Response, next: NextFu
   }
 };
 
+// GET /api/languages/:langSlug/topics/:topicSlug/sections/:sectionSlug/quiz/manage (admin)
+export const getAdminQuizBySection = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const language = await Language.findOne({ slug: req.params.langSlug }).select("_id");
+    if (!language) return next(new AppError("Language not found", 404));
+
+    const topic = await Topic.findOne({ language: language._id, slug: req.params.topicSlug }).select("_id");
+    if (!topic) return next(new AppError("Topic not found", 404));
+
+    const section = await Section.findOne({ topic: topic._id, slug: req.params.sectionSlug }).select("_id");
+    if (!section) return next(new AppError("Section not found", 404));
+
+    const quiz = await Quiz.findOne({ section: section._id });
+    if (!quiz) return next(new AppError("No quiz found for this section", 404));
+
+    sendSuccess(res, quiz, "Quiz fetched for admin");
+  } catch (error) {
+    next(error);
+  }
+};
+
 // POST /api/languages/:langSlug/topics/:topicSlug/sections/:sectionSlug/quiz (admin)
 export const createQuiz = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

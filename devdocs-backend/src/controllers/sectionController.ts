@@ -16,13 +16,16 @@ export const getSectionsByTopic = async (req: Request, res: Response, next: Next
 
     const { page, limit, skip } = getPaginationOptions(req.query as Record<string, unknown>);
 
+    const filter: Record<string, unknown> = { topic: topic._id };
+    if (req.query.published !== "false") filter.isPublished = true;
+
     const [sections, total] = await Promise.all([
-      Section.find({ topic: topic._id, isPublished: true })
+      Section.find(filter)
         .sort({ order: 1 })
         .skip(skip)
         .limit(limit)
-        .select("title slug order readingTimeMinutes isFree viewCount nextSection prevSection"),
-      Section.countDocuments({ topic: topic._id, isPublished: true }),
+        .select("title slug order readingTimeMinutes isFree viewCount isPublished nextSection prevSection"),
+      Section.countDocuments(filter),
     ]);
 
     sendSuccess(res, sections, "Sections fetched", 200, buildPagination(page, limit, total));

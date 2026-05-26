@@ -2,6 +2,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { User } from "@/types";
+import { api } from "@/api/client";
 
 interface AuthState {
   user: User | null;
@@ -13,13 +14,24 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       user: null,
       token: null,
       isAuthenticated: false,
-      setAuth: (user, token) => set({ user, token, isAuthenticated: true }),
-      clearAuth: () => set({ user: null, token: null, isAuthenticated: false }),
+      setAuth: (user, token) => {
+        api.setToken(token);
+        set({ user, token, isAuthenticated: true });
+      },
+      clearAuth: () => {
+        api.setToken(null);
+        set({ user: null, token: null, isAuthenticated: false });
+      },
     }),
-    { name: "devdocs_auth" }
+    {
+      name: "devdocs_auth",
+      onRehydrateStorage: () => (state) => {
+        if (state?.token) api.setToken(state.token);
+      },
+    }
   )
 );

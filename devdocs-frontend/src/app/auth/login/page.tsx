@@ -2,13 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import { api } from "@/api/client";
 import { useAuthStore } from "@/store/authStore";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/docs";
   const { setAuth } = useAuthStore();
 
   const [form, setForm]   = useState({ email: "", password: "" });
@@ -24,7 +27,7 @@ export default function LoginPage() {
       const res = await api.login(form.email, form.password);
       if (res.data) {
         setAuth(res.data.user, res.data.token);
-        router.push("/docs");
+        router.push(redirectTo);
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed");
@@ -90,5 +93,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <LoginForm />
+    </Suspense>
   );
 }

@@ -1,4 +1,16 @@
-import { API_BASE_URL, ApiResponse, Language, Topic, Section, Example, Quiz, User, SearchResult } from "@/types";
+import {
+  API_BASE_URL,
+  ApiResponse,
+  Language,
+  Topic,
+  Section,
+  Example,
+  Quiz,
+  User,
+  SearchResult,
+  ContentBlockInput,
+  AdminQuiz,
+} from "@/types";
 
 class ApiClient {
   private baseUrl: string;
@@ -176,6 +188,145 @@ class ApiClient {
 
   logout() {
     this.setToken(null);
+  }
+
+  // ── Admin: Languages ─────────────────────────────────────────────────────
+  async getLanguagesAdmin() {
+    return this.request<Language[]>("/languages?published=false&limit=100");
+  }
+
+  async createLanguage(body: Partial<Language>) {
+    return this.request<Language>("/languages", { method: "POST", body: JSON.stringify(body) });
+  }
+
+  async updateLanguage(slug: string, body: Partial<Language>) {
+    return this.request<Language>(`/languages/${slug}`, { method: "PATCH", body: JSON.stringify(body) });
+  }
+
+  async deleteLanguage(slug: string) {
+    return this.request<null>(`/languages/${slug}`, { method: "DELETE" });
+  }
+
+  // ── Admin: Topics ────────────────────────────────────────────────────────
+  async getTopicsAdmin(langSlug: string) {
+    return this.request<Topic[]>(`/languages/${langSlug}/topics?published=false&limit=100`);
+  }
+
+  async createTopic(langSlug: string, body: Partial<Topic>) {
+    return this.request<Topic>(`/languages/${langSlug}/topics`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  }
+
+  async updateTopic(langSlug: string, topicSlug: string, body: Partial<Topic>) {
+    return this.request<Topic>(`/languages/${langSlug}/topics/${topicSlug}`, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    });
+  }
+
+  async deleteTopic(langSlug: string, topicSlug: string) {
+    return this.request<null>(`/languages/${langSlug}/topics/${topicSlug}`, { method: "DELETE" });
+  }
+
+  // ── Admin: Sections ──────────────────────────────────────────────────────
+  async getSectionsAdmin(langSlug: string, topicSlug: string) {
+    return this.request<Section[]>(
+      `/languages/${langSlug}/topics/${topicSlug}/sections?published=false&limit=200`
+    );
+  }
+
+  async createSection(
+    langSlug: string,
+    topicSlug: string,
+    body: {
+      title: string;
+      metaDescription?: string;
+      contentBlocks?: ContentBlockInput[];
+      order?: number;
+      isPublished?: boolean;
+      isFree?: boolean;
+      readingTimeMinutes?: number;
+    }
+  ) {
+    return this.request<Section>(`/languages/${langSlug}/topics/${topicSlug}/sections`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  }
+
+  async updateSection(
+    langSlug: string,
+    topicSlug: string,
+    sectionSlug: string,
+    body: Record<string, unknown>
+  ) {
+    return this.request<Section>(
+      `/languages/${langSlug}/topics/${topicSlug}/sections/${sectionSlug}`,
+      { method: "PATCH", body: JSON.stringify(body) }
+    );
+  }
+
+  async deleteSection(langSlug: string, topicSlug: string, sectionSlug: string) {
+    return this.request<null>(
+      `/languages/${langSlug}/topics/${topicSlug}/sections/${sectionSlug}`,
+      { method: "DELETE" }
+    );
+  }
+
+  // ── Admin: Examples ────────────────────────────────────────────────────────
+  async getExamplesAdmin(langSlug: string, topicSlug: string, sectionSlug: string) {
+    return this.request<Example[]>(
+      `/languages/${langSlug}/topics/${topicSlug}/sections/${sectionSlug}/examples?published=false&limit=50`
+    );
+  }
+
+  async createExample(
+    langSlug: string,
+    topicSlug: string,
+    sectionSlug: string,
+    body: Partial<Example>
+  ) {
+    return this.request<Example>(
+      `/languages/${langSlug}/topics/${topicSlug}/sections/${sectionSlug}/examples`,
+      { method: "POST", body: JSON.stringify(body) }
+    );
+  }
+
+  async updateExample(id: string, body: Partial<Example>) {
+    return this.request<Example>(`/examples/${id}`, { method: "PATCH", body: JSON.stringify(body) });
+  }
+
+  async deleteExample(id: string) {
+    return this.request<null>(`/examples/${id}`, { method: "DELETE" });
+  }
+
+  // ── Admin: Quiz ────────────────────────────────────────────────────────────
+  async getAdminQuiz(langSlug: string, topicSlug: string, sectionSlug: string) {
+    return this.request<AdminQuiz>(
+      `/languages/${langSlug}/topics/${topicSlug}/sections/${sectionSlug}/quiz/manage`
+    );
+  }
+
+  async createQuiz(
+    langSlug: string,
+    topicSlug: string,
+    sectionSlug: string,
+    body: Partial<AdminQuiz>
+  ) {
+    return this.request<AdminQuiz>(
+      `/languages/${langSlug}/topics/${topicSlug}/sections/${sectionSlug}/quiz`,
+      { method: "POST", body: JSON.stringify(body) }
+    );
+  }
+
+  async updateQuiz(id: string, body: Partial<AdminQuiz>) {
+    return this.request<AdminQuiz>(`/quiz/${id}`, { method: "PATCH", body: JSON.stringify(body) });
+  }
+
+  async deleteQuiz(id: string) {
+    return this.request<null>(`/quiz/${id}`, { method: "DELETE" });
   }
 }
 

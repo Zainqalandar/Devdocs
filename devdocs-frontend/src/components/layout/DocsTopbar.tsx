@@ -72,6 +72,14 @@ export function DocsTopbar({
 
       {/* Right side */}
       <div className="ml-auto flex items-center gap-2">
+        {user?.role === "admin" && (
+          <Link
+            href="/admin"
+            className="text-xs font-medium text-primary hover:underline hidden sm:inline"
+          >
+            Admin
+          </Link>
+        )}
         <Link href="/search" className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
           <Search className="w-4 h-4" />
         </Link>

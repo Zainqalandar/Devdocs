@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getQuizBySection,
+  getAdminQuizBySection,
   createQuiz,
   updateQuiz,
   deleteQuiz,
@@ -10,6 +11,7 @@ import { protect, restrictTo } from "../middleware/auth";
 
 const router = Router({ mergeParams: true });
 
+router.get("/manage", protect, restrictTo("admin"), getAdminQuizBySection);
 router.get("/", getQuizBySection);
 router.post("/:id/submit", submitQuiz);
 
