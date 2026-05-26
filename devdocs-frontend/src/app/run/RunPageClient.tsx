@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Play, Terminal, ArrowLeft } from "lucide-react";
 import { buildRunnerDocument, isRunMessage, loadRunnerPayload } from "@/lib/run-code";
-import { HighlightedCode } from "@/components/docs/HighlightedCode";
+import { CodeEditor } from "@/components/docs/CodeEditor";
 
 type LoadState = "loading" | "ready" | "missing";
 
@@ -15,6 +15,7 @@ export function RunPageClient() {
   const langParam = searchParams.get("lang") || "javascript";
 
   const [payload, setPayload] = useState<{ code: string; language: string } | null>(null);
+  const [editorCode, setEditorCode] = useState("");
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [runKey, setRunKey] = useState(0);
 
@@ -30,6 +31,7 @@ export function RunPageClient() {
       if (settled) return;
       settled = true;
       setPayload(data);
+      setEditorCode(data.code);
       setLoadState("ready");
     };
 
@@ -72,16 +74,26 @@ export function RunPageClient() {
   }, [key]);
 
   const language = payload?.language ?? langParam;
-  const code = payload?.code ?? "";
 
   const runnerHtml = useMemo(() => {
-    if (!code) return "";
-    return buildRunnerDocument(code, language);
-  }, [code, language, runKey]);
+    if (!editorCode) return "";
+    return buildRunnerDocument(editorCode, language);
+  }, [editorCode, language, runKey]);
 
-  const handleRunAgain = useCallback(() => {
+  const handleRun = useCallback(() => {
     setRunKey((k) => k + 1);
   }, []);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        handleRun();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [handleRun]);
 
   if (!key) {
     return (
@@ -122,7 +134,7 @@ export function RunPageClient() {
           <div className="min-w-0">
             <h1 className="font-mono font-bold text-sm truncate">DevDocs Runner</h1>
             <p className="text-xs text-muted-foreground truncate">
-              {isHtml ? "HTML preview" : "JavaScript console output"}
+              Edit code, then run — {isHtml ? "HTML preview" : "JavaScript output"}
             </p>
           </div>
           <span className="text-[10px] font-mono uppercase tracking-wide text-muted-foreground border border-border px-2 py-0.5 rounded shrink-0">
@@ -130,13 +142,14 @@ export function RunPageClient() {
           </span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
+          <span className="text-[10px] text-muted-foreground hidden md:inline">Ctrl+Enter</span>
           <button
             type="button"
-            onClick={handleRunAgain}
+            onClick={handleRun}
             className="flex items-center gap-1.5 text-xs font-medium bg-primary text-primary-foreground px-3 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
           >
             <Play className="w-3.5 h-3.5" />
-            Run again
+            Run
           </button>
           <button
             type="button"
@@ -149,17 +162,18 @@ export function RunPageClient() {
       </header>
 
       <div className="flex-1 flex flex-col lg:flex-row min-h-0">
-        <section className="lg:w-1/2 border-b lg:border-b-0 lg:border-r border-border flex flex-col min-h-[240px] lg:min-h-0">
-          <div className="px-4 py-2 border-b border-border bg-muted/30">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Source</p>
+        <section className="lg:w-1/2 border-b lg:border-b-0 lg:border-r border-border flex flex-col min-h-[320px] lg:min-h-0">
+          <div className="px-4 py-2 border-b border-border bg-muted/30 flex items-center justify-between">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Editor</p>
+            <p className="text-[10px] text-muted-foreground">Editable</p>
           </div>
-          <div className="flex-1 overflow-auto">
-            <HighlightedCode code={code} language={language} />
+          <div className="flex-1 min-h-0 overflow-hidden bg-[#282c34]">
+            <CodeEditor value={editorCode} onChange={setEditorCode} language={language} />
           </div>
         </section>
 
         <section className="lg:w-1/2 flex flex-col min-h-[320px] lg:min-h-0 flex-1">
-          <div className="px-4 py-2 border-b border-border bg-muted/30 flex items-center justify-between">
+          <div className="px-4 py-2 border-b border-border bg-muted/30">
             <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
               {isHtml ? "Preview" : "Output"}
             </p>
