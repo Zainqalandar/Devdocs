@@ -5,6 +5,7 @@ import { Check, Copy, Heart, Terminal, ChevronDown, ChevronUp } from "lucide-rea
 import { cn } from "@/lib/utils";
 import { api } from "@/api/client";
 import type { Example } from "@/types";
+import { HighlightedCode } from "@/components/docs/HighlightedCode";
 
 const DIFF_COLORS = {
   beginner:     { bg: "bg-green-500/10",  text: "text-green-400",  border: "border-green-500/20"  },
@@ -65,9 +66,7 @@ function ExampleCard({ example }: { example: Example }) {
                 {copied ? "Copied!" : "Copy"}
               </button>
             </div>
-            <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
-              <code className="font-mono text-[#abb2bf]">{example.code}</code>
-            </pre>
+            <HighlightedCode code={example.code} language={example.codeLanguage} />
           </div>
 
           {/* Expected output */}

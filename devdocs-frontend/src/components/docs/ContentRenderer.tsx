@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Check, Copy, AlertTriangle, Info, Lightbulb, Terminal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ContentBlock } from "@/types";
+import { HighlightedCode } from "@/components/docs/HighlightedCode";
 
 function CodeBlock({ content, language }: { content: string; language?: string }) {
   const [copied, setCopied] = useState(false);
@@ -32,10 +33,7 @@ function CodeBlock({ content, language }: { content: string; language?: string }
           {copied ? "Copied!" : "Copy"}
         </button>
       </div>
-      {/* Code */}
-      <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
-        <code className="font-mono text-[#abb2bf]">{content}</code>
-      </pre>
+      <HighlightedCode code={content} language={language} />
     </div>
   );
 }
