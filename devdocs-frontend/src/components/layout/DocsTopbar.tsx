@@ -33,7 +33,7 @@ export function DocsTopbar({
   };
 
   return (
-    <header className="sticky top-0 z-40 h-14 border-b border-border bg-background/80 backdrop-blur-md flex items-center px-4 gap-4">
+    <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b border-white/[0.06] bg-background/85 px-4 backdrop-blur-xl">
       {/* Mobile menu */}
       <button
         onClick={onMenuClick}

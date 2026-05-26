@@ -177,3 +177,43 @@
 ::selection {
   background-color: hsl(38 92% 50% / 0.25);
 }
+
+/* ── Docs sidebar ──────────────────────────────────────────────────────────── */
+.sidebar-surface {
+  background:
+    linear-gradient(180deg, hsl(222 47% 9% / 0.98) 0%, hsl(222 47% 7% / 1) 45%, hsl(222 47% 6% / 1) 100%);
+}
+
+
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 999px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.45);
+}
+
+@keyframes sidebarTopicIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sidebar-topic-enter {
+  animation: sidebarTopicIn 0.35s ease backwards;
+}
