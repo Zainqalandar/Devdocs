@@ -12,7 +12,7 @@ export function getCodeMirrorLanguage(lang?: string): Extension {
       return html();
     case "typescript":
     case "ts":
-      return javascript({ typescript: true });
+      return javascript({ typescript: true, jsx: false });
     case "jsx":
       return javascript({ jsx: true });
     case "tsx":
