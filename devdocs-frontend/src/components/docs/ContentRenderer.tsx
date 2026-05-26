@@ -1,23 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { Check, Copy, AlertTriangle, Info, Lightbulb, Terminal } from "lucide-react";
+import { AlertTriangle, Info, Lightbulb, Terminal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ContentBlock } from "@/types";
 import { HighlightedCode } from "@/components/docs/HighlightedCode";
+import { CodeBlockActions } from "@/components/docs/CodeBlockActions";
 
 function CodeBlock({ content, language }: { content: string; language?: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(content);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
     <div className="my-5 rounded-xl overflow-hidden border border-border bg-code-bg">
-      {/* Header bar */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-border">
         <div className="flex items-center gap-2">
           <Terminal className="w-3.5 h-3.5 text-muted-foreground" />
@@ -25,13 +16,7 @@ function CodeBlock({ content, language }: { content: string; language?: string }
             {language || "code"}
           </span>
         </div>
-        <button
-          onClick={handleCopy}
-          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded hover:bg-white/5"
-        >
-          {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
-          {copied ? "Copied!" : "Copy"}
-        </button>
+        <CodeBlockActions code={content} language={language} />
       </div>
       <HighlightedCode code={content} language={language} />
     </div>

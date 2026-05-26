@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy, Heart, Terminal, ChevronDown, ChevronUp } from "lucide-react";
+import { Heart, Terminal, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { api } from "@/api/client";
 import type { Example } from "@/types";
 import { HighlightedCode } from "@/components/docs/HighlightedCode";
+import { CodeBlockActions } from "@/components/docs/CodeBlockActions";
 
 const DIFF_COLORS = {
   beginner:     { bg: "bg-green-500/10",  text: "text-green-400",  border: "border-green-500/20"  },
@@ -14,16 +15,9 @@ const DIFF_COLORS = {
 };
 
 function ExampleCard({ example }: { example: Example }) {
-  const [copied, setCopied] = useState(false);
-  const [likes, setLikes]   = useState(example.likeCount);
-  const [open, setOpen]     = useState(true);
+  const [likes, setLikes] = useState(example.likeCount);
+  const [open, setOpen] = useState(true);
   const dc = DIFF_COLORS[example.difficulty];
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(example.code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   const handleLike = async () => {
     try {
@@ -61,10 +55,11 @@ function ExampleCard({ example }: { example: Example }) {
           <div className="relative bg-code-bg">
             <div className="flex items-center justify-between px-4 py-2 border-b border-border/50">
               <span className="text-xs font-mono text-muted-foreground uppercase tracking-wide">{example.codeLanguage}</span>
-              <button onClick={handleCopy} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
-                {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
-                {copied ? "Copied!" : "Copy"}
-              </button>
+              <CodeBlockActions
+                code={example.code}
+                language={example.codeLanguage}
+                runnable={example.isRunnable}
+              />
             </div>
             <HighlightedCode code={example.code} language={example.codeLanguage} />
           </div>
