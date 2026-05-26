@@ -13,7 +13,9 @@ export const getTopicsByLanguage = async (req: Request, res: Response, next: Nex
 
     const { page, limit, skip } = getPaginationOptions(req.query as Record<string, unknown>);
     const filter: Record<string, unknown> = { language: language._id };
-    if (req.query.published !== "false") filter.isPublished = true;
+    const { published } = req.query;
+    if (published === "true") filter.isPublished = true;
+    else if (published === "false") filter.isPublished = false;
 
     const [topics, total] = await Promise.all([
       Topic.find(filter).sort({ order: 1 }).skip(skip).limit(limit),

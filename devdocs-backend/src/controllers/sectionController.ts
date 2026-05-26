@@ -17,7 +17,9 @@ export const getSectionsByTopic = async (req: Request, res: Response, next: Next
     const { page, limit, skip } = getPaginationOptions(req.query as Record<string, unknown>);
 
     const filter: Record<string, unknown> = { topic: topic._id };
-    if (req.query.published !== "false") filter.isPublished = true;
+    const { published } = req.query;
+    if (published === "true") filter.isPublished = true;
+    else if (published === "false") filter.isPublished = false;
 
     const [sections, total] = await Promise.all([
       Section.find(filter)

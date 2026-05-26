@@ -1,13 +1,13 @@
 "use client";
 
-import { AdminPageHeader } from "@/components/admin/admin-ui";
-import { LanguageForm } from "@/components/admin/LanguageForm";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export default function NewLanguagePage() {
-  return (
-    <div>
-      <AdminPageHeader title="New language" description="Add a new documentation track." />
-      <LanguageForm />
-    </div>
-  );
+/** Redirect to main languages page — create is handled in modal */
+export default function NewLanguageRedirectPage() {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace("/admin/languages");
+  }, [router]);
+  return null;
 }

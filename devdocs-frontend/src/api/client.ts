@@ -191,8 +191,13 @@ class ApiClient {
   }
 
   // ── Admin: Languages ─────────────────────────────────────────────────────
-  async getLanguagesAdmin() {
-    return this.request<Language[]>("/languages?published=false&limit=100");
+  async getLanguagesAdmin(params?: { search?: string; published?: "all" | "true" | "false" }) {
+    const query = new URLSearchParams({ limit: "100" });
+    if (params?.search) query.set("search", params.search);
+    if (params?.published && params.published !== "all") {
+      query.set("published", params.published);
+    }
+    return this.request<Language[]>(`/languages?${query}`);
   }
 
   async createLanguage(body: Partial<Language>) {
@@ -209,7 +214,7 @@ class ApiClient {
 
   // ── Admin: Topics ────────────────────────────────────────────────────────
   async getTopicsAdmin(langSlug: string) {
-    return this.request<Topic[]>(`/languages/${langSlug}/topics?published=false&limit=100`);
+    return this.request<Topic[]>(`/languages/${langSlug}/topics?limit=100`);
   }
 
   async createTopic(langSlug: string, body: Partial<Topic>) {
@@ -233,7 +238,7 @@ class ApiClient {
   // ── Admin: Sections ──────────────────────────────────────────────────────
   async getSectionsAdmin(langSlug: string, topicSlug: string) {
     return this.request<Section[]>(
-      `/languages/${langSlug}/topics/${topicSlug}/sections?published=false&limit=200`
+      `/languages/${langSlug}/topics/${topicSlug}/sections?limit=200`
     );
   }
 
@@ -278,7 +283,7 @@ class ApiClient {
   // ── Admin: Examples ────────────────────────────────────────────────────────
   async getExamplesAdmin(langSlug: string, topicSlug: string, sectionSlug: string) {
     return this.request<Example[]>(
-      `/languages/${langSlug}/topics/${topicSlug}/sections/${sectionSlug}/examples?published=false&limit=50`
+      `/languages/${langSlug}/topics/${topicSlug}/sections/${sectionSlug}/examples?limit=50`
     );
   }
 

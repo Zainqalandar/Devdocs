@@ -19,7 +19,9 @@ export const getAllLanguages = async (req: Request, res: Response, next: NextFun
     const filter: Record<string, unknown> = {};
     if (category) filter.category = category;
     if (difficulty) filter.difficulty = difficulty;
-    if (published !== undefined) filter.isPublished = published === "true";
+    if (published === "true") filter.isPublished = true;
+    else if (published === "false") filter.isPublished = false;
+    // omit published or published=all → return every language (admin list)
     if (search) {
       filter.$or = [
         { name: { $regex: search, $options: "i" } },
