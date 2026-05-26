@@ -64,6 +64,14 @@ npm run dev
 
 Server starts at: `http://localhost:5000`
 
+### Interactive API docs (Swagger)
+
+Open **[http://localhost:5000/api-docs](http://localhost:5000/api-docs)** for the full OpenAPI UI.
+
+- Raw OpenAPI JSON: `GET /api-docs.json`
+- Use **Authorize** with `Bearer <token>` after login for protected routes
+- Admin routes require a user with `role: admin`
+
 ---
 
 ## 📡 API Reference

@@ -16,6 +16,7 @@ const startServer = async () => {
     console.log(`🌍  Mode      : ${process.env.NODE_ENV || "development"}`);
     console.log(`🔗  Base URL  : http://localhost:${PORT}`);
     console.log(`📖  API Docs  : http://localhost:${PORT}/api`);
+    console.log(`📘  Swagger   : http://localhost:${PORT}/api-docs`);
     console.log(`❤️   Health    : http://localhost:${PORT}/health`);
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
   });

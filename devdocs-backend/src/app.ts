@@ -9,11 +9,23 @@ import languageRoutes from "./routes/languageRoutes";
 import authRoutes from "./routes/authRoutes";
 import { searchSections } from "./controllers/sectionController";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
+import { setupSwagger } from "./config/swagger";
 
 const app: Application = express();
 
 // ── Security & utility middleware ───────────────────────────────────────────
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        imgSrc: ["'self'", "data:", "https:"],
+      },
+    },
+  })
+);
 app.use(compression());
 app.use(
   cors({
@@ -41,6 +53,9 @@ app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV !== "test") {
   app.use(morgan(process.env.NODE_ENV === "development" ? "dev" : "combined"));
 }
+
+// ── API documentation (Swagger UI) ──────────────────────────────────────────
+setupSwagger(app);
 
 // ── Health check ────────────────────────────────────────────────────────────
 app.get("/health", (_req, res) => {
